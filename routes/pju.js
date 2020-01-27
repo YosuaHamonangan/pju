@@ -31,13 +31,6 @@ router.post('/create', isAuthenticated(), asyncRoute(async function(req, res, ne
 		res.status(400).send({ message : "Foto wajib diisi" });
 		return;
 	}
-	var fotoFile = files.foto;
-
-	// Save foto to fs
-	var foto = await Foto.create();
-	var ext = path.extname(fotoFile.name);
-	var filepath = `/${foto.id}${ext}`;
-	await fs.writeFile(filepath, fotoFile.data);
 
 	// Save PJU info to db
 	try {
@@ -47,18 +40,22 @@ router.post('/create', isAuthenticated(), asyncRoute(async function(req, res, ne
 		var message = "Data tidak valid";
 		return res.status(400).send({ message });
 	};
+	
+	// Save foto to fs and db
+	var fotoFile = files.foto;
+	var ext = path.extname(fotoFile.name);
+	var foto = await Foto.create({
+		kodePju: pju.kode,
+		originalName: fotoFile.name,
+	});
+	var filepath = `/${foto.id}${ext}`;
+	await foto.update({ path: filepath });
+	await fs.writeFile(filepath, fotoFile.data);
 
 	await PjuHistory.create({
 		kodePju: pju.kode, 
 		kodeUser: user.kode,
 		type: "CREATE",
-	});
-
-	// Save foto info to db
-	await foto.update({
-		kodePju: pju.kode,
-		originalName: fotoFile.name,
-		path: filepath
 	});
 
 	res.status(200).end();
