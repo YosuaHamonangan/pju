@@ -1,0 +1,24 @@
+{
+  "name": "pjumanagement-server",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "start": "nodemon ./www"
+  },
+  "dependencies": {
+    "cookie-parser": "~1.4.3",
+    "crypto": "^1.0.1",
+    "debug": "~2.6.9",
+    "dotenv": "^8.2.0",
+    "express": "~4.16.0",
+    "express-fileupload": "^1.1.6",
+    "express-session": "^1.17.0",
+    "fs-extra": "^8.1.0",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.19.3",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
+    "sequelize": "^5.19.6",
+    "sqlite3": "^4.1.0"
+  }
+}
