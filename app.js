@@ -28,12 +28,12 @@ var routeList = require("./route-list");
 routeList.forEach( ({path, router}) => app.use(path, router) );
 
 app.use(function(req, res, next) {
-	res.status(404).end({ message: "API tidak ditemukan" });
+	res.status(404).send({ message: "API tidak ditemukan" });
 });
 
 app.use(function(err, req, res, next) {
 	console.error(err);
-	res.status(500).end({ message: "Terjadi masalah dengan server, dimohon untuk menghubungi admin" });
+	res.status(500).send({ message: "Terjadi masalah dengan server, dimohon untuk menghubungi admin" });
 });
 
 
