@@ -1,7 +1,7 @@
 module.exports = (sequelize, DataTypes) => {
 	var foto = sequelize.define("foto", {
 		kodePju: {
-			type: DataTypes.INTEGER,
+			type: DataTypes.UUID,
 		},
 		originalName: {
 			type: DataTypes.STRING,
