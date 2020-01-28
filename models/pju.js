@@ -20,11 +20,11 @@ module.exports = (sequelize, DataTypes) => {
 			allowNull: false,
 		},
 		longitude: {
-			type: DataTypes.FLOAT,
+			type: DataTypes.DECIMAL(9, 6),
 			allowNull: false,
 		},
 		latitude: {
-			type: DataTypes.FLOAT,
+			type: DataTypes.DECIMAL(9, 6),
 			allowNull: false,
 		},
 		jalan: {
