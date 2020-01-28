@@ -27,9 +27,9 @@ app.use(fileUpload());
 var routeList = require("./route-list");
 routeList.forEach( ({path, router}) => app.use(path, router) );
 
-app.use(function(req, res, next) {
-	res.status(404).send({ message: "API tidak ditemukan" });
-});
+// app.use(function(req, res, next) {
+// 	res.status(404).send({ message: "API tidak ditemukan" });
+// });
 
 app.use(function(err, req, res, next) {
 	console.error(err);
