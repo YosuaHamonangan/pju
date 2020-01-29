@@ -32,11 +32,14 @@ else{
 	});
 }
 
-var modelsPath = path.join(process.cwd(), "models");
+var modelsPath = path.join(process.cwd(), "server", "models");
 var models = getDbModels(sequelize, modelsPath);
 
-sequelize.sync()
+var promise = sequelize.sync()
 	.then( () => sequelize.authenticate())
-	.then( () => console.log("Database connection has been established successfully.") );
+	.then( () => {
+		console.log("Database connection has been established successfully.");
+		return Promise.resolve({ Sequelize, sequelize, models });
+	});
 
-module.exports = { Sequelize, sequelize, models }
+module.exports = promise;

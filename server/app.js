@@ -1,6 +1,5 @@
 require("dotenv").config();
 
-global.db = require("./db");
 var express = require("express");
 var logger = require("morgan");
 var session = require('express-session');
