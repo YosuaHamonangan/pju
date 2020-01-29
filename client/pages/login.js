@@ -39,7 +39,7 @@ class Pages extends React.Component {
 
 	render() {
 		return (
-			<Container component="main" maxWidth="xs">
+			<Container maxWidth="xs">
 				<CssBaseline />
 				<div style={styles.paper}>
 					<Avatar style={styles.avatar}>
