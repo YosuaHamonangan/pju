@@ -14,6 +14,9 @@ var port = normalizePort(process.env.PORT || '3000');
 	var server = require('./server/app');
 
 	server.all("*", (req, res) => {
+		if(!req.url.startsWith("/_next") && req.url !== '/login' && !req.isAuthenticated()){
+			return res.redirect("/login");
+		}
 		return handle(req, res);
 	});
 

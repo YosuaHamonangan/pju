@@ -1,13 +1,2 @@
-import React from "react";
-
-class Page extends React.Component {
-	render() {
-		return (
-		  <div>
-		    <p>PJU Management</p>
-		  </div>
-		);
-	}
-}
-
+import Page from './dashboard';
 export default Page;
