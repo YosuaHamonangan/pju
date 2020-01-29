@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "nodemon ./www",
+    "dev": "nodemon ./index.js",
     "build": "next build  ./client",
-    "start": "cross-env NODE_ENV=production node ./www"
+    "start": "cross-env NODE_ENV=production node ./index.js"
   },
   "dependencies": {
     "cookie-parser": "~1.4.3",
