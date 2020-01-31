@@ -44,28 +44,28 @@ class Page extends React.Component {
 						<div className="row">
 							<div className="col-sm-6 col-md-4 col-lg-3 mb-3">
 								<StatsCard
-									headerIcon={<FontAwesomeIcon icon={faLightbulb} color="#777777"/> }
+									headerIcon={<FontAwesomeIcon icon={faLightbulb} color="yellow"/> }
 									label="Total PJU"
 									value={`${totalLegal + totalIlegal} titik`}
 								/>
 							</div>
 							<div className="col-sm-6 col-md-4 col-lg-3 mb-3">
 								<StatsCard
-									headerIcon={<FontAwesomeIcon icon={faCheckCircle} color="#777777"/> }
+									headerIcon={<FontAwesomeIcon icon={faCheckCircle} color="green"/> }
 									label="PJU Legal"
 									value={`${totalLegal} titik`}
 								/>
 							</div>
 							<div className="col-sm-6 col-md-4 col-lg-3 mb-3">
 								<StatsCard
-									headerIcon={<FontAwesomeIcon icon={faBan} color="#777777"/> }
+									headerIcon={<FontAwesomeIcon icon={faBan} color="red"/> }
 									label="PJU Ilegal"
 									value={`${totalIlegal} titik`}
 								/>
 							</div>
 							<div className="col-sm-6 col-md-4 col-lg-3 mb-3">
 								<StatsCard
-									headerIcon={<FontAwesomeIcon icon={faBolt} color="#777777"/> }
+									headerIcon={<FontAwesomeIcon icon={faBolt} color="yellow"/> }
 									label="Susut/hari"
 									value={`${kwh} kWh`}
 								/>
