@@ -1,12 +1,14 @@
 import React from "react";
-import Link from 'next/link'
-import Button from 'react-bootstrap/Button'
-import Collapse from 'react-bootstrap/Collapse'
+import Router from "next/router";
+import Link from "next/link";
+import Button from "react-bootstrap/Button";
+import Collapse from "react-bootstrap/Collapse";
 import NavDropdown	from "react-bootstrap/NavDropdown";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faChevronLeft, faTachometerAlt } from '@fortawesome/free-solid-svg-icons';
+import services from "../services";
 
 import "./Layout.css";
 
@@ -23,6 +25,11 @@ class Layout extends React.Component {
 	closeDrawer = () => {
 		this.setState({ open: false });
 		return false;
+	};
+
+	logout = () => {
+		services.logout()
+			.then( () => Router.push("/login") )
 	};
 
 	Header = props => (
@@ -45,7 +52,7 @@ class Layout extends React.Component {
 			<Navbar.Collapse className="justify-content-end">
 				<Navbar.Text>
 					<Link href="/login">
-						<a>Logout</a>
+						<a onClick={this.logout}>Logout</a>
 					</Link>
 				</Navbar.Text>
 			</Navbar.Collapse>

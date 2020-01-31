@@ -9,6 +9,9 @@ var services = {
 	login: async function(username, password) {
 		return await instance.post("/user/login", {username, password});
 	},
+	logout: async function() {
+		return await instance.post("/user/logout");
+	},
 	getStatistics: async function() {
 		var res = await instance.get("/pju/statistic");
 		return res.data;

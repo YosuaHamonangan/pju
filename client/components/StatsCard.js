@@ -6,7 +6,7 @@ import "./StatsCard.css"
 
 export default function StatsCard({ className="", headerIcon, label, value, bodyIcon, text}) {
 	return (
-		<Card className={"StatsCard rounded " + className}>
+		<Card className={"StatsCard " + className}>
 			<Card.Header id="header">
 				<Row>
 					<Col xs={4} id="icon">
