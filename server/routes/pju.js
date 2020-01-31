@@ -4,6 +4,7 @@ var path = require("path");
 var asyncRoute = require("../utils/async-route");
 var { isAuthenticated } = require("../utils/user-auth");
 var fs = require("../utils/fs-picker");
+var sequelize = db.sequelize;
 var Pju = db.models.pju;
 var PjuHistory = db.models.pjuHistory;
 var Foto = db.models.foto;
@@ -83,6 +84,17 @@ router.post('/update', isAuthenticated(), asyncRoute(async function(req, res, ne
 	});
 
 	res.status(200).end();
+}));
+
+router.get('/statistic', isAuthenticated(), asyncRoute(async function(req, res, next) {
+	var data = await Pju.findOne({
+		attributes:[
+			[sequelize.literal("SUM(idPelanggan IS NULL)"), "totalLegal"],
+			[sequelize.literal("SUM(idPelanggan IS NOT NULL)"), "totalIlegal"],
+			[sequelize.literal("SUM(daya)"), "totalDaya"],
+		]
+	});
+	res.status(200).send(data);
 }));
 
 module.exports = router;

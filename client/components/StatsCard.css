@@ -1,0 +1,17 @@
+.StatsCard #header {
+	background-color: transparent;
+}
+.StatsCard #header #icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 2.5em;
+}
+
+.StatsCard #header #text {
+	font-size: 1.2em;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	text-align: right;
+}

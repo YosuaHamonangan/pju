@@ -1,111 +1,97 @@
 import React from "react";
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Drawer from "@material-ui/core/Drawer";
-import Divider from "@material-ui/core/Divider";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Toolbar from "@material-ui/core/Toolbar";
-import IconButton from "@material-ui/core/IconButton";
-import Typography from "@material-ui/core/Typography";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import InboxIcon from "@material-ui/icons/Inbox";
-import MailIcon from "@material-ui/icons/Mail";
-import MenuIcon from "@material-ui/icons/Menu";
+import Link from 'next/link'
+import Button from 'react-bootstrap/Button'
+import Collapse from 'react-bootstrap/Collapse'
+import NavDropdown	from "react-bootstrap/NavDropdown";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars, faChevronLeft, faTachometerAlt } from '@fortawesome/free-solid-svg-icons';
+
+import "./Layout.css";
 
 class Layout extends React.Component {
-	state = {};
+	state = {
+		open: true,
+	};
 
 	openDrawer = () => {
 		this.setState({ open: true });
+		return false;
 	};
 
 	closeDrawer = () => {
 		this.setState({ open: false });
+		return false;
 	};
 
-	render() {
-		return (
-			<div style={styles.root}>
-				<CssBaseline />
-				<AppBar position="static" style={styles.header}>
-					<Toolbar>
-						<IconButton 
-							edge="start" 
-							color="inherit" 
-							style={styles.menuButton}
-							onClick={this.openDrawer}
-						>
-							<MenuIcon />
-						</IconButton>
-						<Typography variant="h6">
-							Manajemen PJU
-						</Typography>
-					</Toolbar>
-				</AppBar>
-				<Drawer variant="persistent" open={this.state.open}>
-					<div style={styles.drawer}>
-						<div style={styles.drawerCloseButton}>
-							<Typography variant="h6" align="center" style={{width: "100%"}}>
-								Manajemen PJU
-							</Typography>
-							<IconButton onClick={this.closeDrawer}>
-								<ChevronLeftIcon />
-							</IconButton>
-						</div>
-						<Divider/>
-						<List>
-							<ListItem button>
-								<ListItemIcon>
-									<InboxIcon/>
-								</ListItemIcon>
-								<ListItemText primary={"Inbox"} />
-							</ListItem>
-							<ListItem button>
-								<ListItemIcon>
-									<MailIcon/>
-								</ListItemIcon>
-								<ListItemText primary={"Inbox"} />
-							</ListItem>
-						</List>
+	Header = props => (
+		<Navbar id="Header">
+
+			{this.state.open ? 
+				<div className="sidebar-spacer"/> : 
+				<React.Fragment>
+					<Button id="open-btn" onClick={this.openDrawer}>
+						<FontAwesomeIcon icon={faBars} color="#777777"/>
+					</Button>
+					<Navbar.Brand>
+						<Link href="/">
+							<a>Manajemen PJU</a>
+						</Link>
+					</Navbar.Brand>
+				</React.Fragment>
+			}
+			
+			<Navbar.Collapse className="justify-content-end">
+				<Navbar.Text>
+					<Link href="/login">
+						<a>Logout</a>
+					</Link>
+				</Navbar.Text>
+			</Navbar.Collapse>
+		</Navbar>
+	);
+
+	Sidebar = () => (
+		<Collapse in={this.state.open} dimension="width">
+			<div>
+				<div id="Sidebar">
+					<div id="header">
+						<Link href="/">
+							<a>Manajemen PJU</a>
+						</Link>
+						<Button id="close-btn" onClick={this.closeDrawer}>
+							<FontAwesomeIcon icon={faChevronLeft} color="white"/>
+						</Button>
 					</div>
-				</Drawer>
-				<main style={styles.content}>
-					{this.props.children}
-				</main>
+					<Nav defaultActiveKey="/home" className="flex-column">
+						<Nav.Item>
+							<Link href="/">
+								<a><FontAwesomeIcon icon={faTachometerAlt} color="white"/>Dashboard</a>
+							</Link>
+						</Nav.Item>
+					</Nav>
+				</div>
+			</div>
+		</Collapse>
+	);
+
+	render() {
+		var { Header, Sidebar } = this;
+		return (
+			<div>
+				<Header/>
+				<Sidebar/>
+				<div className="d-flex">
+					
+					{ this.state.open && <div className="sidebar-spacer flex-shrink-0"/> }
+					<main id="Content">
+						{this.props.children}
+					</main>
+				</div>
 			</div>
 		);
 	}
-}
-
-var drawerWidth = 256;
-var headerHeight = 64;
-var styles = {
-	header: {
-		position: "fixed",
-		height: headerHeight
-	},
-	menuButton: {
-		marginRight: 36,
-	},
-	drawerCloseButton: {
-		display: "flex",
-		alignItems: "center",
-		// justifyContent: "center",
-		padding: "0 8px",
-		height: headerHeight
-	},
-	drawer: {
-		width: drawerWidth
-	},
-	content: {
-		height: "100vh",
-		paddingTop: headerHeight,
-		overflow: "auto",
-	},
 }
 
 export default Layout;

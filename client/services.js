@@ -9,6 +9,10 @@ var services = {
 	login: async function(username, password) {
 		return await instance.post("/user/login", {username, password});
 	},
+	getStatistics: async function() {
+		var res = await instance.get("/pju/statistic");
+		return res.data;
+	},
 	errorHandler: function(err) {
 		if(!err.response) {
 			return "Gagal terhubung dengan server, mohon cek koneksi anda";
