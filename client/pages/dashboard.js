@@ -27,6 +27,10 @@ class Page extends React.Component {
 
 	render() {
 		var { loading, error, data } = this.state;
+		var totalLegal = +data.totalLegal;
+		var totalIlegal = +data.totalIlegal;
+		var kWh = estimateKwh(+data.totalDaya);
+
 		return (
 			<Layout>
 				<div className="mx-5 my-4">
@@ -39,28 +43,28 @@ class Page extends React.Component {
 								<StatsCard
 									headerIcon={<FontAwesomeIcon icon={faLightbulb} color="#777777"/> }
 									label="Total PJU"
-									value={`${+data.totalLegal + data.totalIlegal} titik`}
+									value={`${totalLegal + totalIlegal} titik`}
 								/>
 							</div>
 							<div className="col-sm-6 col-md-4 col-lg-3 mb-3">
 								<StatsCard
 									headerIcon={<FontAwesomeIcon icon={faCheckCircle} color="#777777"/> }
 									label="PJU Legal"
-									value={`${data.totalLegal} titik`}
+									value={`${totalLegal} titik`}
 								/>
 							</div>
 							<div className="col-sm-6 col-md-4 col-lg-3 mb-3">
 								<StatsCard
 									headerIcon={<FontAwesomeIcon icon={faBan} color="#777777"/> }
 									label="PJU Ilegal"
-									value={`${data.totalIlegal} titik`}
+									value={`${totalIlegal} titik`}
 								/>
 							</div>
 							<div className="col-sm-6 col-md-4 col-lg-3 mb-3">
 								<StatsCard
 									headerIcon={<FontAwesomeIcon icon={faBolt} color="#777777"/> }
 									label="Susut/hari"
-									value={`${estimateKwh(data.totalDaya)} kWh`}
+									value={`${kwh} kWh`}
 								/>
 							</div>
 						</div>

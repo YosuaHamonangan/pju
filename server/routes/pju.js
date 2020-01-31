@@ -89,8 +89,8 @@ router.post('/update', isAuthenticated(), asyncRoute(async function(req, res, ne
 router.get('/statistic', isAuthenticated(), asyncRoute(async function(req, res, next) {
 	var data = await Pju.findOne({
 		attributes:[
-			[sequelize.literal("SUM(idPelanggan IS NULL)"), "totalLegal"],
-			[sequelize.literal("SUM(idPelanggan IS NOT NULL)"), "totalIlegal"],
+			[sequelize.literal("SUM(idPelanggan IS NULL)"), "totalIlegal"],
+			[sequelize.literal("SUM(idPelanggan IS NOT NULL)"), "totalLegal"],
 			[sequelize.literal("SUM(daya)"), "totalDaya"],
 		]
 	});
