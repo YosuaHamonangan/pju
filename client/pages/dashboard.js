@@ -31,7 +31,7 @@ class Page extends React.Component {
 		if(data) {
 			var totalLegal = +data.totalLegal;
 			var totalIlegal = +data.totalIlegal;
-			var kWh = estimateKwh(+data.totalDaya);
+			var kwh = estimateKwh(+data.totalDaya);
 		}
 
 		return (
