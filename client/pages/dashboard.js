@@ -27,9 +27,12 @@ class Page extends React.Component {
 
 	render() {
 		var { loading, error, data } = this.state;
-		var totalLegal = +data.totalLegal;
-		var totalIlegal = +data.totalIlegal;
-		var kWh = estimateKwh(+data.totalDaya);
+
+		if(data) {
+			var totalLegal = +data.totalLegal;
+			var totalIlegal = +data.totalIlegal;
+			var kWh = estimateKwh(+data.totalDaya);
+		}
 
 		return (
 			<Layout>
