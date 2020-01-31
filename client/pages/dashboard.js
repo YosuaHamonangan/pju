@@ -39,7 +39,7 @@ class Page extends React.Component {
 								<StatsCard
 									headerIcon={<FontAwesomeIcon icon={faLightbulb} color="#777777"/> }
 									label="Total PJU"
-									value={`${data.totalLegal + data.totalIlegal} titik`}
+									value={`${+data.totalLegal + data.totalIlegal} titik`}
 								/>
 							</div>
 							<div className="col-sm-6 col-md-4 col-lg-3 mb-3">
