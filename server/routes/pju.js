@@ -4,13 +4,20 @@ var path = require("path");
 var asyncRoute = require("../utils/async-route");
 var { isAuthenticated } = require("../utils/user-auth");
 var fs = require("../utils/fs-picker");
-var sequelize = db.sequelize;
+var { Sequelize: { Op }, sequelize} = db;
 var Pju = db.models.pju;
 var PjuHistory = db.models.pjuHistory;
 var Foto = db.models.foto;
 
 router.get('/list', isAuthenticated(), asyncRoute(async function(req, res, next) {
-	var list = await Pju.findAll();
+	var { legal } = req.query;
+	var filter = {};
+
+	if(legal === "true") {
+		filter.idPelanggan = { [Op.ne]: null };
+	}
+
+	var list = await Pju.findAll({ where: filter });
 	res.status(200).send(list);
 }));
 
@@ -62,7 +69,7 @@ router.post('/create', isAuthenticated(), asyncRoute(async function(req, res, ne
 	res.status(200).end();
 }));
 
-router.post('/update', isAuthenticated(), asyncRoute(async function(req, res, next) {
+router.post('/update', isAuthenticated(["lapangan"]), asyncRoute(async function(req, res, next) {
 	var { user, body: data, query: { kode } } = req;
 
 	var pju = await Pju.findOne({ where: { kode } });

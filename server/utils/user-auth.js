@@ -1,6 +1,7 @@
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var crypto = require("crypto");
+var userRoles = require("../constants/user-roles");
 var User = db.models.user;
 
 passport.use("local-register", new LocalStrategy(
@@ -75,14 +76,25 @@ function encryptPass(password) {
 	return { salt, hash };
 }
 
-function isAuthenticated(){
-	return function(req, res, next){
-		if(req.isAuthenticated()) {
-			next();
+function isAuthenticated(roles) {
+	var checkRole = Array.isArray(roles);
+	if(checkRole) {
+		roles = roles.map( name => {
+			var role = userRoles.find( r => r.name == name );
+			return role.id;
+		});
+	}
+
+	return function(req, res, next) {
+		if(!req.isAuthenticated()) {
+			return res.status(401).send({ message: "Unauthorized" });
 		}
-		else {
-			return res.status(401).send("unauthorized");
+
+		if(checkRole && !roles.includes(req.user.role)) {
+			return res.status(401).send({ message: "Unauthorized role" });
 		}
+		
+		next();
 	}
 }
 
