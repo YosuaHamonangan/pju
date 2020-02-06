@@ -10,7 +10,8 @@ router.post("/register", isAuthenticated(["admin"]), asyncRoute(async function(r
 		res.status(200).send("Registered");
 	}
 	catch(err) {
-		res.status(400).send(err);
+		var { message } = err;
+		res.status(400).send({ message });
 	}
 }));
 

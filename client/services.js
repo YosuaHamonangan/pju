@@ -20,6 +20,9 @@ var services = {
 		var res = await instance.get("/user/list");
 		return res.data;
 	},
+	registerUser: async function(data) {
+		return await instance.post("/user/register", data);
+	},
 	getStatistics: async function() {
 		var res = await instance.get("/pju/statistic");
 		return res.data;

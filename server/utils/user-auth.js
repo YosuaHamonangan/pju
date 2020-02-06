@@ -1,14 +1,14 @@
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var crypto = require("crypto");
-var userRoles = require("../constants/user-roles");
+var userRoles = require("../../global/constants/user-roles");
 var User = db.models.user;
 
 async function registerUser(data) {
 	var { username, password } = data;
 	var user = await User.findOne({ where: { username } });
 	if(user) {
-		throw Error({ message: "Username sudah digunakan" });
+		throw Error("Username sudah digunakan");
 	}
 	
 	var { salt, hash } = encryptPass(password);
@@ -17,7 +17,7 @@ async function registerUser(data) {
 		return await User.create({...data, salt, hash});
 	}
 	catch(err) {
-		throw Error({ message: "Data tidak valid" });
+		throw Error("Data tidak valid: " + err.errors[0].message);
 	}
 }
 

@@ -1,5 +1,5 @@
 import React from "react";
-
+import Link from "next/link";
 import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Layout from "../components/Layout";
@@ -25,7 +25,9 @@ class Page extends React.Component {
 		return (
 			<Layout>
 				<div className="mx-5 my-4">
-					<Button variant="secondary" className="mb-3">User Baru</Button>
+					<Link href="/user-baru">
+						<Button variant="secondary" className="mb-3">User Baru</Button>
+					</Link>
 					<Table striped bordered hover>
 						<thead>
 							<tr>
