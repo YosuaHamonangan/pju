@@ -4,37 +4,24 @@ var crypto = require("crypto");
 var userRoles = require("../constants/user-roles");
 var User = db.models.user;
 
-passport.use("local-register", new LocalStrategy(
-	{
-		usernameField: "username",
-		passwordField: "password",
-		passReqToCallback: true
-	},
-	async (req, username, password, done) => {
-		try{
-			var user = await User.findOne({ where: { username} });
-			if(user) {
-				return done(null, false, { message: "Username sudah digunakan" });
-			}
-			
-			var { body } = req;
-			var { salt, hash } = encryptPass(password);
-			user = await User.create({...body, role: 1, salt, hash})
-				.catch( () => {
-					done(null, false, { message: "Data tidak valid" });
-				});
-
-			if(user){
-				return done(null, user);
-			}
-		}
-		catch(err){
-			done(err);
-		}
+async function registerUser(data) {
+	var { username, password } = data;
+	var user = await User.findOne({ where: { username } });
+	if(user) {
+		throw Error({ message: "Username sudah digunakan" });
 	}
-));
+	
+	var { salt, hash } = encryptPass(password);
 
-passport.use("local-login", new LocalStrategy(
+	try {
+		return await User.create({...data, salt, hash});
+	}
+	catch(err) {
+		throw Error({ message: "Data tidak valid" });
+	}
+}
+
+passport.use(new LocalStrategy(
 	{
 		usernameField: "username",
 		passwordField: "password",
@@ -100,5 +87,6 @@ function isAuthenticated(roles) {
 
 module.exports = {
 	passport,
-	isAuthenticated
+	isAuthenticated,
+	registerUser
 }

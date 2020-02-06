@@ -7,7 +7,8 @@ import NavDropdown	from "react-bootstrap/NavDropdown";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faChevronLeft, faTachometerAlt } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faChevronLeft, faTachometerAlt, faUser, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
+import store from "../store";
 import services from "../services";
 
 import "./Layout.css";
@@ -29,12 +30,14 @@ class Layout extends React.Component {
 
 	logout = () => {
 		services.logout()
-			.then( () => Router.push("/login") )
+			.then( () => {
+				store.dispatch({ type: "REMOVE_USER" });
+				Router.push("/login"); 
+			})
 	};
 
 	Header = props => (
 		<Navbar id="Header">
-
 			{this.state.open ? 
 				<div className="sidebar-spacer"/> : 
 				<React.Fragment>
@@ -51,6 +54,9 @@ class Layout extends React.Component {
 			
 			<Navbar.Collapse className="justify-content-end">
 				<Navbar.Text>
+					<span className="pr-3">
+						User: {store.getState().user.name}
+					</span>
 					<Link href="/login">
 						<a onClick={this.logout}>Logout</a>
 					</Link>
@@ -75,6 +81,16 @@ class Layout extends React.Component {
 						<Nav.Item>
 							<Link href="/">
 								<a><FontAwesomeIcon icon={faTachometerAlt} color="white"/>Dashboard</a>
+							</Link>
+						</Nav.Item>
+						<Nav.Item>
+							<Link href="/map">
+								<a><FontAwesomeIcon icon={faMapMarkedAlt} color="white"/>Map</a>
+							</Link>
+						</Nav.Item>
+						<Nav.Item>
+							<Link href="/user">
+								<a><FontAwesomeIcon icon={faUser} color="white"/>User</a>
 							</Link>
 						</Nav.Item>
 					</Nav>

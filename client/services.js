@@ -1,5 +1,6 @@
 import axios from "axios";
 import Router from "next/router";
+import store from "./store";
 
 var instance = axios.create({
 	// baseURL: BASE_URL
@@ -7,10 +8,17 @@ var instance = axios.create({
 
 var services = {
 	login: async function(username, password) {
-		return await instance.post("/user/login", {username, password});
+		var res = await instance.post("/user/login", {username, password});
+		var user = res.data;
+		store.dispatch({ type: "SET_USER", user });
+		return user;
 	},
 	logout: async function() {
 		return await instance.post("/user/logout");
+	},
+	getUserList: async function() {
+		var res = await instance.get("/user/list");
+		return res.data;
 	},
 	getStatistics: async function() {
 		var res = await instance.get("/pju/statistic");

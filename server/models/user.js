@@ -42,5 +42,13 @@ module.exports = (sequelize, DataTypes) => {
 		
 	}
 
+	user.prototype.getLimitedInfo = function() {
+		var info = {};
+		["kode", "username", "name", "email", "role"]
+			.forEach( prop => info[prop] = this[prop] );
+
+		return info;
+	}
+
 	return user;
 }

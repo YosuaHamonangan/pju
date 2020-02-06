@@ -7,7 +7,7 @@ import services from "../services";
 
 import "./login.css";
 
-class Pages extends React.Component {
+class Page extends React.Component {
 	state = {};
 
 	login = evt => {
@@ -15,7 +15,7 @@ class Pages extends React.Component {
 
 		if(this.state.loading) return;
 
-		// this.setState({ loading: true });
+		this.setState({ loading: true });
 
 		var { username, password } = this.state;
 		services.login(username, password)
@@ -62,4 +62,4 @@ class Pages extends React.Component {
 	}
 }
 
-export default Pages;
+export default Page;
