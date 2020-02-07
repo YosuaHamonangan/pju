@@ -2,9 +2,9 @@ import React from "react";
 import GoogleMapReact from "google-map-react";
 import Layout from "../components/Layout";
 import Loading from "../components/Loading";
+import Icon from "../components/Icon";
 import services from "../services";
 
-const AnyReactComponent = ({ text }) => <div>{text}</div>;
 class Page extends React.Component {
 	static defaultProps = {
 		center: {
@@ -16,9 +16,21 @@ class Page extends React.Component {
 
 	state = {};
 
+	componentDidMount() {
+		this.setState({ loading: true });
+
+		services.getPjuList()
+			.then( list => {
+				this.setState({ list, loading: false });
+			})
+			.catch( err => {
+				services.errorHandler(err);
+				this.setState({ loading: false });
+			});
+	}
+
 	render() {
-		var { loading, error } = this.state;
-		console.log(process.env.MAP_API_KEY)
+		var { loading, error, list } = this.state;
 		return (
 			<Layout>
 				<div className="px-5 py-4 h-100">
@@ -28,17 +40,32 @@ class Page extends React.Component {
 							defaultCenter={this.props.center}
 							defaultZoom={this.props.zoom}
 						>
-							<AnyReactComponent
-								lat={59.955413}
-								lng={30.337844}
-								text="My Marker"
-							/>
+							{list && 
+								list.map( (pju, i) => (
+									<Marker 
+										key={i}
+										lat={+pju.latitude}
+										lng={+pju.longitude}
+										data={pju}
+									/>
+								))
+							}
 						</GoogleMapReact>
 					</div>
 				</div>
 			</Layout>
 		);
 	}
+}
+
+function Marker({data}){
+	return (
+		<Icon
+			icon="map-marker-alt"
+			color= {data.idPelanggan ? "blue" : "red"}
+			style={{ fontSize: 30 }}
+		/>
+	);
 }
 
 export default Page;

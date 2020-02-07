@@ -27,6 +27,14 @@ var services = {
 		var res = await instance.get("/pju/statistic");
 		return res.data;
 	},
+	getPjuList: async function(filter) {
+		if(filter) {
+			var filterQuery = filter.map( ([key, val]) => `${key}=${val}`).join("&");
+		}
+		var query = filterQuery ? `?${filterQuery}` : "" ;
+		var res = await instance.get(`/pju/list${query}`);
+		return res.data;
+	},
 	errorHandler: function(err) {
 		if(!err.response) {
 			return "Gagal terhubung dengan server, mohon cek koneksi anda";
