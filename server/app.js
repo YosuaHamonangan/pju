@@ -1,5 +1,3 @@
-require("dotenv").config();
-
 var express = require("express");
 var logger = require("morgan");
 var session = require('express-session');
