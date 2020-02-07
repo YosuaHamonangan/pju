@@ -9,6 +9,7 @@ import Nav from "react-bootstrap/Nav";
 import Icon from "./Icon";
 import store from "../store";
 import services from "../services";
+import userRoles from "../../global/constants/user-roles";
 
 import "./Layout.css";
 
@@ -35,7 +36,7 @@ class Layout extends React.Component {
 			})
 	};
 
-	Header = props => (
+	Header = () => (
 		<Navbar id="Header">
 			{this.state.open ? 
 				<div className="sidebar-spacer"/> : 
@@ -64,44 +65,50 @@ class Layout extends React.Component {
 		</Navbar>
 	);
 
-	Sidebar = () => (
-		<Collapse in={this.state.open} dimension="width">
-			<div>
-				<div id="Sidebar">
-					<div id="header">
-						<Link href="/">
-							<a>Manajemen PJU</a>
-						</Link>
-						<Button id="close-btn" onClick={this.closeDrawer}>
-							<Icon icon="chevron-left" color="white"/>
-						</Button>
-					</div>
-					<Nav defaultActiveKey="/home" className="flex-column">
-						<Nav.Item>
+	Sidebar = () => {
+		var { user } = store.getState();
+		var role = userRoles.getById(user.role).name;
+		return (
+			<Collapse in={this.state.open} dimension="width">
+				<div>
+					<div id="Sidebar">
+						<div id="header">
 							<Link href="/">
-								<a><Icon icon="tachometer-alt" color="white"/>Dashboard</a>
+								<a>Manajemen PJU</a>
 							</Link>
-						</Nav.Item>
-						<Nav.Item>
-							<Link href="/map">
-								<a><Icon icon="map-marked-alt" color="white"/>Map</a>
-							</Link>
-						</Nav.Item>
-						<Nav.Item>
-							<Link href="/pju">
-								<a><Icon icon="table" color="white"/>Daftar PJU</a>
-							</Link>
-						</Nav.Item>
-						<Nav.Item>
-							<Link href="/user">
-								<a><Icon icon="user" color="white"/>User</a>
-							</Link>
-						</Nav.Item>
-					</Nav>
+							<Button id="close-btn" onClick={this.closeDrawer}>
+								<Icon icon="chevron-left" color="white"/>
+							</Button>
+						</div>
+						<Nav defaultActiveKey="/home" className="flex-column">
+							<Nav.Item>
+								<Link href="/">
+									<a><Icon icon="tachometer-alt" color="white"/>Dashboard</a>
+								</Link>
+							</Nav.Item>
+							<Nav.Item>
+								<Link href="/map">
+									<a><Icon icon="map-marked-alt" color="white"/>Map</a>
+								</Link>
+							</Nav.Item>
+							<Nav.Item>
+								<Link href="/pju">
+									<a><Icon icon="table" color="white"/>Daftar PJU</a>
+								</Link>
+							</Nav.Item>
+							{ role === "admin" &&
+								<Nav.Item>
+									<Link href="/user">
+										<a><Icon icon="user" color="white"/>User</a>
+									</Link>
+								</Nav.Item>
+							}
+						</Nav>
+					</div>
 				</div>
-			</div>
-		</Collapse>
-	);
+			</Collapse>
+		);
+	};
 
 	render() {
 		var { Header, Sidebar } = this;

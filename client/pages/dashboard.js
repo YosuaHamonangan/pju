@@ -7,7 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLightbulb, faCheckCircle, faBan, faBolt } from '@fortawesome/free-solid-svg-icons';
 
 function estimateKwh(daya) {
-	return daya*12/1000;
+	return daya*375/1000;
 }
 
 class Page extends React.Component {
@@ -65,7 +65,7 @@ class Page extends React.Component {
 							<div className="col-sm-6 col-md-4 col-lg-3 mb-3">
 								<StatsCard
 									headerIcon={<FontAwesomeIcon icon={faBolt} color="yellow"/> }
-									label="Susut/hari"
+									label="Susut/bulan"
 									value={`${kwh} kWh`}
 								/>
 							</div>

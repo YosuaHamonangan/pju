@@ -14,6 +14,8 @@ var list = [
 		name: "tamu",
 		label: "Tamu",
 	},
-]
+];
+
+list.getById = id => list.find( role => role.id == id );
 
 module.exports = list;
