@@ -5,13 +5,7 @@ var next = require("next");
 var withCSS = require("@zeit/next-css")
 var dev = process.env.NODE_ENV !== "production";
 var dir = "./client";
-var conf = {
-	...withCSS(),
-	env: {
-		MAP_API_KEY: process.env.MAP_API_KEY,
-	},
-}
-var app = next({ dir, dev, conf });
+var app = next({ dir, dev });
 var handle = app.getRequestHandler();
 var port = normalizePort(process.env.PORT || '3000');
 
