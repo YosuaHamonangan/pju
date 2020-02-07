@@ -6,8 +6,7 @@ import Collapse from "react-bootstrap/Collapse";
 import NavDropdown	from "react-bootstrap/NavDropdown";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faChevronLeft, faTachometerAlt, faUser, faMapMarkedAlt } from '@fortawesome/free-solid-svg-icons';
+import Icon from "./Icon";
 import store from "../store";
 import services from "../services";
 
@@ -74,23 +73,28 @@ class Layout extends React.Component {
 							<a>Manajemen PJU</a>
 						</Link>
 						<Button id="close-btn" onClick={this.closeDrawer}>
-							<FontAwesomeIcon icon={faChevronLeft} color="white"/>
+							<Icon icon="chevron-left" color="white"/>
 						</Button>
 					</div>
 					<Nav defaultActiveKey="/home" className="flex-column">
 						<Nav.Item>
 							<Link href="/">
-								<a><FontAwesomeIcon icon={faTachometerAlt} color="white"/>Dashboard</a>
+								<a><Icon icon="tachometer-alt" color="white"/>Dashboard</a>
 							</Link>
 						</Nav.Item>
 						<Nav.Item>
 							<Link href="/map">
-								<a><FontAwesomeIcon icon={faMapMarkedAlt} color="white"/>Map</a>
+								<a><Icon icon="map-marked-alt" color="white"/>Map</a>
+							</Link>
+						</Nav.Item>
+						<Nav.Item>
+							<Link href="/pju">
+								<a><Icon icon="table" color="white"/>Daftar PJU</a>
 							</Link>
 						</Nav.Item>
 						<Nav.Item>
 							<Link href="/user">
-								<a><FontAwesomeIcon icon={faUser} color="white"/>User</a>
+								<a><Icon icon="user" color="white"/>User</a>
 							</Link>
 						</Nav.Item>
 					</Nav>

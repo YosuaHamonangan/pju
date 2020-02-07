@@ -4,6 +4,7 @@ var path = require("path");
 var asyncRoute = require("../utils/async-route");
 var { isAuthenticated } = require("../utils/user-auth");
 var fs = require("../utils/fs-picker");
+var createExcel = require("../utils/create-excel");
 var { Sequelize: { Op }, sequelize} = db;
 var Pju = db.models.pju;
 var PjuHistory = db.models.pjuHistory;
@@ -30,6 +31,16 @@ router.get('/img', isAuthenticated(), asyncRoute(async function(req, res, next) 
 	res.setHeader('Content-Type', foto.mimetype);
 	res.writeHead(200);
     res.end(file);
+}));
+
+router.get('/excel', isAuthenticated(), asyncRoute(async function(req, res, next) {
+	var list = await Pju.findAll();
+
+	var columns = ["longitude", "latitude", "daya"];
+	var data = list.map( row => columns.map( col => row[col] ) );
+
+	var filepath = createExcel("pju.xlsx", [columns, ...data]);
+	res.status(200).download(filepath, 'pju.xlsx');
 }));
 
 router.post('/create', isAuthenticated(), asyncRoute(async function(req, res, next) {
