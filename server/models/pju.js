@@ -1,3 +1,5 @@
+var mapUtils = require("../../global/utils/map");
+
 module.exports = (sequelize, DataTypes) => {
 	var pju = sequelize.define("pju", {
 		kode: {
@@ -30,6 +32,10 @@ module.exports = (sequelize, DataTypes) => {
 		jalan: {
 			type: DataTypes.STRING,
 		},
+		// Provinsi
+		provinsi: {
+			type: DataTypes.STRING,
+		},
 		// Kota/Kabupaten
 		kota: {
 			type: DataTypes.STRING,
@@ -47,9 +53,18 @@ module.exports = (sequelize, DataTypes) => {
 		rt: {
 			type: DataTypes.STRING,
 		},
+		section: {
+			type: DataTypes.STRING,
+			allowNull: false,
+		}
 	}, {
 		freezeTableName: true,
-		timestamps: false
+		timestamps: false,
+		hooks: {
+			beforeValidate: (pju, options) => {
+				pju.section = mapUtils.getSection(pju.longitude, pju.latitude);
+			}
+		}
 	});
 
 	pju.associate = models => {

@@ -11,11 +11,20 @@ var PjuHistory = db.models.pjuHistory;
 var Foto = db.models.foto;
 
 router.get('/list', isAuthenticated(), asyncRoute(async function(req, res, next) {
-	var { legal } = req.query;
+	var { legal, longitudeMin, longitudeMax, latitudeMin, latitudeMax, sections } = req.query;
 	var filter = {};
 
 	if(legal === "true") {
 		filter.idPelanggan = { [Op.ne]: null };
+	}
+
+	if(longitudeMin && longitudeMax && latitudeMin && latitudeMax) {
+		filter.longitude = { [Op.between]: [+longitudeMin, +longitudeMax] };
+		filter.latitude = { [Op.between]: [+latitudeMin, +latitudeMax] };
+	}
+
+	if(sections) {
+		filter.section = sections.split(",");
 	}
 
 	var list = await Pju.findAll({ where: filter });

@@ -28,11 +28,9 @@ var services = {
 		return res.data;
 	},
 	getPjuList: async function(filter) {
-		if(filter) {
-			var filterQuery = filter.map( ([key, val]) => `${key}=${val}`).join("&");
-		}
-		var query = filterQuery ? `?${filterQuery}` : "" ;
-		var res = await instance.get(`/pju/list${query}`);
+		var res = await instance.get("/pju/list", { 
+			params: { ...filter }
+		});
 		return res.data;
 	},
 	errorHandler: function(err) {

@@ -4,14 +4,57 @@ import Layout from "../components/Layout";
 import Loading from "../components/Loading";
 import Icon from "../components/Icon";
 import MapMarker from "../components/MapMarker";
+import mapUtils from "../../global/utils/map";
 import services from "../services";
 
+var MAX_CHUNK = 50;
+
 class Page extends React.Component {
-	state = {};
+	state = {
+		list: [],
+	};
+
+	fetchedSections = {};
 
 	getPjuList = ({bounds}) => {
-		console.log(bounds)
+		this._getPjuList(bounds).catch(console.error);
+
 	};
+
+	async _getPjuList(bounds) {
+		this.setState({ loading: true });
+
+		var { 
+			nw: { lat: latitudeMax, lng: longitudeMin }, 
+			se: { lat: latitudeMin, lng: longitudeMax } 
+		} = bounds;
+
+		var sections = mapUtils.range2Sections(longitudeMin, longitudeMax, latitudeMin, latitudeMax);
+		sections = sections.filter( section => {
+			if(!this.fetchedSections[section]) {
+				this.fetchedSections[section] = true;
+				return true;
+			}
+			return false;
+		});
+
+
+		for (var i = 0; i < sections.length; i+=MAX_CHUNK) {
+			var chunk = sections.slice(i, i+MAX_CHUNK);
+			var sectionsString = chunk.join(",");
+
+			try {
+				var data = await services.getPjuList({ sections: sectionsString });
+			}
+			catch(err) {
+				services.errorHandler(err);
+				this.setState({ loading: false });
+			};
+
+			var list = this.state.list.concat(data);
+			this.setState({ list, loading: false });
+		}
+	}
 
 	componentDidMount() {
 		if (navigator.geolocation) {
@@ -21,7 +64,7 @@ class Page extends React.Component {
 						lng: coords.longitude,
 						lat: coords.latitude,
 					},
-					zoom: 12
+					zoom: 20
 				});
 			});
 		}
@@ -31,18 +74,6 @@ class Page extends React.Component {
 				zoom: 4.5
 			});
 		}
-
-		this.setState({ loading: true });
-
-		services.getPjuList()
-			.then( list => {
-				this.setState({ list, loading: false });
-			})
-			.catch( err => {
-				services.errorHandler(err);
-				this.setState({ loading: false });
-			});
-
 	}
 
 	render() {
@@ -60,17 +91,6 @@ class Page extends React.Component {
 								onChange={this.getPjuList}
 							>
 								<MapMarker list={list}/>
-								{
-									// list && 
-									// list.map( (pju, i) => (
-									// 	<Marker 
-									// 		key={i}
-									// 		lat={+pju.latitude}
-									// 		lng={+pju.longitude}
-									// 		data={pju}
-									// 	/>
-									// ))
-								}
 							</GoogleMapReact>
 						}
 					</div>

@@ -19,24 +19,28 @@ class Component extends React.Component {
 
 		ctx.clearRect(0, 0, width, width);
 
-		list.forEach( ({ longitude, latitude }, i) => {
+		list.forEach( ({ longitude, latitude, idPelanggan }, i) => {
 			var { x, y } = $geoService.fromLatLngToDivPixel({
 				lat: latitude, 
 				lng: longitude
 			});
 
-			this._drawMarker(x + width, y + height);
+			var color = idPelanggan ? "blue" : "red";
+
+			this._drawMarker(x + width, y + height, color);
 		});
 	}
 
-	_drawMarker(x, y) {
+	_drawMarker(x, y, color) {
 		var { ctx } = this;
 		ctx.beginPath();
-		ctx.fillStyle = "green";
-		ctx.arc(x, y, 10, 0, 2 * Math.PI);
+
+		ctx.fillStyle = color;
+		ctx.arc(x, y, 8, 0, 2 * Math.PI);
 		ctx.fill();
-		ctx.lineWidth = 5;
-		ctx.strokeStyle = "#003300";
+
+		ctx.lineWidth = 2;
+		ctx.strokeStyle = "black";
 		ctx.stroke();
 	}
 
