@@ -7,7 +7,7 @@ import MapMarker from "../components/MapMarker";
 import mapUtils from "../../global/utils/map";
 import services from "../services";
 
-var MAX_CHUNK = 50;
+var MAX_CHUNK_SIZE = 100;
 
 class Page extends React.Component {
 	state = {
@@ -16,12 +16,12 @@ class Page extends React.Component {
 
 	fetchedSections = {};
 
-	getPjuList = ({bounds}) => {
-		this._getPjuList(bounds).catch(console.error);
-
+	onMapChange = val => {
+		var { bounds } = val;
+		this.getPjuList(bounds).catch(console.error);
 	};
 
-	async _getPjuList(bounds) {
+	async getPjuList(bounds) {
 		this.setState({ loading: true });
 
 		var { 
@@ -38,9 +38,8 @@ class Page extends React.Component {
 			return false;
 		});
 
-
-		for (var i = 0; i < sections.length; i+=MAX_CHUNK) {
-			var chunk = sections.slice(i, i+MAX_CHUNK);
+		for (var i = 0; i < sections.length; i+=MAX_CHUNK_SIZE) {
+			var chunk = sections.slice(i, i+MAX_CHUNK_SIZE);
 			var sectionsString = chunk.join(",");
 
 			try {
@@ -71,7 +70,7 @@ class Page extends React.Component {
 		else {
 			this.setState({
 				center: { lng: 118.015776, lat: -2.600029 },
-				zoom: 4.5
+				zoom: 15
 			});
 		}
 	}
@@ -85,10 +84,11 @@ class Page extends React.Component {
 						{ center && 
 							<GoogleMapReact
 								ref="map"
+								options={{ minZoom: 8 }}
 								bootstrapURLKeys={{ key: process.env.MAP_API_KEY }}
 								defaultCenter={center}
 								defaultZoom={zoom}
-								onChange={this.getPjuList}
+								onChange={this.onMapChange}
 							>
 								<MapMarker list={list}/>
 							</GoogleMapReact>

@@ -10,6 +10,8 @@ var Pju = db.models.pju;
 var PjuHistory = db.models.pjuHistory;
 var Foto = db.models.foto;
 
+Pju.findAll().then( list => list.forEach( a => { a.update() }) )
+
 router.get('/list', isAuthenticated(), asyncRoute(async function(req, res, next) {
 	var { legal, longitudeMin, longitudeMax, latitudeMin, latitudeMax, sections } = req.query;
 	var filter = {};

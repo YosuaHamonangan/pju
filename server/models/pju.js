@@ -55,15 +55,14 @@ module.exports = (sequelize, DataTypes) => {
 		},
 		section: {
 			type: DataTypes.STRING,
-			allowNull: false,
 		}
 	}, {
 		freezeTableName: true,
 		timestamps: false,
 		hooks: {
-			beforeValidate: (pju, options) => {
+			beforeUpdate: (pju, options) => {
 				pju.section = mapUtils.getSection(pju.longitude, pju.latitude);
-			}
+			},
 		}
 	});
 

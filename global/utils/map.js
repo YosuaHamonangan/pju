@@ -1,4 +1,4 @@
-var sectionLength = 0.001;
+var sectionLength = 1;
 
 var utils = {
 	getSection: function(longitude, latitude) {
