@@ -42,7 +42,7 @@ class Layout extends React.Component {
 				<div className="sidebar-spacer"/> : 
 				<React.Fragment>
 					<Button id="open-btn" onClick={this.openDrawer}>
-						<FontAwesomeIcon icon={faBars} color="#777777"/>
+						<Icon icon="bars" color="#777777"/>
 					</Button>
 					<Navbar.Brand>
 						<Link href="/">
