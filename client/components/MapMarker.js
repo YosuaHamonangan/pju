@@ -1,7 +1,7 @@
 import React from "react";
 import { latLng2Tile } from "google-map-react/utils";
-class Component extends React.Component {
 
+class Component extends React.Component {
 	componentDidMount() {
 		var canvas = this.canvas;
 		this.ctx = this.canvas.getContext("2d");
@@ -19,16 +19,37 @@ class Component extends React.Component {
 
 		ctx.clearRect(0, 0, width, width);
 
-		list.forEach( ({ longitude, latitude, idPelanggan }, i) => {
+		var idPelGroups = {};
+		list.forEach( (pju, i) => {
+			var { longitude, latitude, idPelanggan } = pju;
+
 			var { x, y } = $geoService.fromLatLngToDivPixel({
 				lat: latitude, 
 				lng: longitude
 			});
+			x += width;
+			y += height;
 
-			var color = idPelanggan ? "blue" : "red";
+			var color = "red";
+			if(idPelanggan) {
+				idPelGroups[idPelanggan] = idPelGroups[idPelanggan]  || [];
+				idPelGroups[idPelanggan].push({x, y});
+				color = "blue";
+			}
 
-			this._drawMarker(x + width, y + height, color);
+			this._drawMarker(x, y, color);
 		});
+
+		for(var idPelanggan in idPelGroups) {
+			var [start, ...ends] = idPelGroups[idPelanggan];
+
+			ends.forEach( end => {
+				var { x: x1, y: y1 } = start;
+				var { x: x2, y: y2 } = end;
+				this._drawLine(x1, y1, x2, y2, "blue");
+				start = end;
+			});
+		}
 	}
 
 	_drawMarker(x, y, color) {
@@ -41,6 +62,18 @@ class Component extends React.Component {
 
 		ctx.lineWidth = 2;
 		ctx.strokeStyle = "black";
+		ctx.stroke();
+	}
+
+	_drawLine(x1, y1, x2, y2, color) {
+		var { ctx } = this;
+		ctx.beginPath();
+
+
+		ctx.lineWidth = 2;
+		ctx.strokeStyle = color;
+		ctx.moveTo(x1, y1);
+		ctx.lineTo(x2, y2);
 		ctx.stroke();
 	}
 
