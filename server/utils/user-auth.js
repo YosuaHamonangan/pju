@@ -21,6 +21,15 @@ async function registerUser(data) {
 	}
 }
 
+async function changePassword(user, currentPassword, password) {
+	if(!validate(user, currentPassword)) {
+		throw Error("Password yang lama tidak sesuai");
+	}
+
+	var { salt, hash } = encryptPass(password);
+	return await user.update({ salt, hash });
+}
+
 passport.use(new LocalStrategy(
 	{
 		usernameField: "username",
@@ -88,5 +97,6 @@ function isAuthenticated(roles) {
 module.exports = {
 	passport,
 	isAuthenticated,
-	registerUser
+	registerUser,
+	changePassword
 }

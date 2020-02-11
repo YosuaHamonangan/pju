@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var asyncRoute = require("../utils/async-route");
-var { registerUser, isAuthenticated, passport } = require("../utils/user-auth");
+var { registerUser, changePassword, isAuthenticated, passport } = require("../utils/user-auth");
 var User = db.models.user;
 
 router.post("/register", isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
@@ -15,8 +15,45 @@ router.post("/register", isAuthenticated(["admin"]), asyncRoute(async function(r
 	}
 }));
 
+router.post("/password", isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
+	var { kode, currentPassword, password } = req.body;
+	var user = await User.findOne({ where: { kode } });
+
+	if(!user) {
+		var message = "User tidak ditemukan";
+		res.status(400).send({ message });
+	}
+
+	try {
+		var user = await changePassword(user, currentPassword, password);
+		res.status(200).send("Changed");
+	}
+	catch(err) {
+		var { message } = err;
+		res.status(400).send({ message });
+	}
+}));
+
+router.post("/update", isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
+	var { kode, data } = req.body;
+	var user = await User.findOne({ where: { kode } });
+
+	if(!user) {
+		var message = "User tidak ditemukan";
+		res.status(400).send({ message });
+	}
+	await user.update(data);
+	res.status(200).send(user.getLimitedInfo());
+}));
+
+router.get('/get', isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
+	var { kode } = req.query;
+	var user = await User.scope("limitedInfo").findOne({ where: { kode } });
+	res.status(200).send(user);
+}));
+
 router.get('/list', isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
-	var list = await User.findAll();
+	var list = await User.scope("limitedInfo").findAll();
 	res.status(200).send(list);
 }));
 

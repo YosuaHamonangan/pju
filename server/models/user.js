@@ -1,3 +1,5 @@
+var LIMITED_INFO = ["kode", "username", "name", "email", "role"];
+
 module.exports = (sequelize, DataTypes) => {
 	var user = sequelize.define("user", {
 		kode: {
@@ -36,6 +38,11 @@ module.exports = (sequelize, DataTypes) => {
 		},
 	}, {
 		freezeTableName: true,
+		scopes: {
+			limitedInfo: {
+				attributes: LIMITED_INFO,
+			},
+		}
 	});
 
 	user.associate = models => {
@@ -44,9 +51,7 @@ module.exports = (sequelize, DataTypes) => {
 
 	user.prototype.getLimitedInfo = function() {
 		var info = {};
-		["kode", "username", "name", "email", "role"]
-			.forEach( prop => info[prop] = this[prop] );
-
+		LIMITED_INFO.forEach( prop => info[prop] = this[prop] );
 		return info;
 	}
 

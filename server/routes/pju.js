@@ -10,7 +10,7 @@ var Pju = db.models.pju;
 var PjuHistory = db.models.pjuHistory;
 var Foto = db.models.foto;
 
-router.get('/list', isAuthenticated(), asyncRoute(async function(req, res, next) {
+router.get('/list', isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
 	var { legal, longitudeMin, longitudeMax, latitudeMin, latitudeMax, sections } = req.query;
 	var filter = {};
 
@@ -116,9 +116,10 @@ router.post('/update', isAuthenticated(["lapangan"]), asyncRoute(async function(
 router.get('/statistic', isAuthenticated(), asyncRoute(async function(req, res, next) {
 	var data = await Pju.findOne({
 		attributes:[
-			[sequelize.literal("SUM(idPelanggan IS NULL)"), "totalIlegal"],
-			[sequelize.literal("SUM(idPelanggan IS NOT NULL)"), "totalLegal"],
+			[sequelize.literal("count(id)"), "totalPju"],
+			[sequelize.literal("SUM(idPelanggan IS NULL)"), "totalPjuIlegal"],
 			[sequelize.literal("SUM(daya)"), "totalDaya"],
+			[sequelize.literal("SUM(daya * (idPelanggan IS NULL))"), "totalDayaIlegal"],
 		]
 	});
 	res.status(200).send(data);

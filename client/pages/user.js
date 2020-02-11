@@ -4,6 +4,7 @@ import Table from "react-bootstrap/Table";
 import Button from "react-bootstrap/Button";
 import Layout from "../components/Layout";
 import Loading from "../components/Loading";
+import Icon from "../components/Icon";
 import services from "../services";
 
 class Page extends React.Component {
@@ -35,6 +36,7 @@ class Page extends React.Component {
 								<th>Username</th>
 								<th>Name</th>
 								<th>Role</th>
+								<th/>
 							</tr>
 						</thead>
 						<tbody>
@@ -45,6 +47,13 @@ class Page extends React.Component {
 										<td>{user.username}</td>
 										<td>{user.name}</td>
 										<td>{user.role}</td>
+										<td>
+											<Link href="/user/[kode]" as={`/user/${user.kode}`}>
+												<Button variant="secondary" className="py-0">
+													<Icon icon="edit" className="mr-2"/>Edit
+												</Button>
+											</Link>
+										</td>
 									</tr>
 								))
 							}

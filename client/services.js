@@ -20,8 +20,20 @@ var services = {
 		var res = await instance.get("/user/list");
 		return res.data;
 	},
+	getUser: async function(kode) {
+		var res = await instance.get("/user/get", { 
+			params: { kode }
+		});
+		return res.data;
+	},
 	registerUser: async function(data) {
 		return await instance.post("/user/register", data);
+	},
+	updateUser: async function(kode, data) {
+		return await instance.post("/user/update", { kode, data });
+	},
+	updatePassword: async function(kode, currentPassword, password) {
+		return await instance.post("/user/password", { kode, currentPassword, password });
 	},
 	getStatistics: async function() {
 		var res = await instance.get("/pju/statistic");

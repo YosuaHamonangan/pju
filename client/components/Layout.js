@@ -110,6 +110,10 @@ class Layout extends React.Component {
 		);
 	};
 
+	goToTop() {
+		this.refs.content.scrollTo(0, 0);
+	}
+
 	render() {
 		var { Header, Sidebar } = this;
 		return (
@@ -119,7 +123,7 @@ class Layout extends React.Component {
 				<div className="d-flex">
 					
 					{ this.state.open && <div className="sidebar-spacer flex-shrink-0"/> }
-					<main id="Content">
+					<main id="Content" ref="content">
 						{this.props.children}
 					</main>
 				</div>
