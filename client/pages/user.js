@@ -6,6 +6,7 @@ import Layout from "../components/Layout";
 import Loading from "../components/Loading";
 import Icon from "../components/Icon";
 import services from "../services";
+import userRoles from "../../global/constants/user-roles";
 
 class Page extends React.Component {
 	state = {};
@@ -46,7 +47,7 @@ class Page extends React.Component {
 										<td>{i}</td>
 										<td>{user.username}</td>
 										<td>{user.name}</td>
-										<td>{user.role}</td>
+										<td>{userRoles.getById(user.role).label}</td>
 										<td>
 											<Link href="/user/[kode]" as={`/user/${user.kode}`}>
 												<Button variant="secondary" className="py-0">

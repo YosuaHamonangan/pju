@@ -16,6 +16,10 @@ var list = [
 	},
 ];
 
-list.getById = id => list.find( role => role.id == id );
+
+var obj = {};
+list.forEach( r => obj[r.id] = r );
+
+list.getById = id => obj[id];
 
 module.exports = list;
