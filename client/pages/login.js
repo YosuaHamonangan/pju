@@ -3,6 +3,7 @@ import Router from "next/router";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Loading from "../components/Loading";
 import services from "../services";
 
 import "./login.css";
@@ -30,16 +31,21 @@ class Page extends React.Component {
 	};
 
 	render() {
+		var { loading, error } = this.state;
 		return (
 			<div id="login">
+				<h1 className="mb-5">Aplikasi Manajemen PJU</h1>
 				<Card className="p-5">
-					<h1>Sign in</h1>
+					<h2>Sign in</h2>
+					{ loading && <Loading/> }
+					{ error && <div className="alert alert-warning px-4" role="alert">{error}</div> }
 					<Form onSubmit={this.login}>
 						<Form.Group controlId="username">
 							<Form.Label>Username</Form.Label>
 							<Form.Control 
 								placeholder="Enter username" 
 								onChange={ evt => this.setState({ username: evt.target.value }) }
+								required
 							/>
 						</Form.Group>
 
@@ -49,6 +55,7 @@ class Page extends React.Component {
 								type="password" 
 								placeholder="Password" 
 								onChange={ evt => this.setState({ password: evt.target.value }) }
+								required
 							/>
 						</Form.Group>
 
