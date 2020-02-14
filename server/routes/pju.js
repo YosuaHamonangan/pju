@@ -11,7 +11,12 @@ var PjuHistory = db.models.pjuHistory;
 var Foto = db.models.foto;
 
 router.get('/list', isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
-	var { legal, longitudeMin, longitudeMax, latitudeMin, latitudeMax, sections } = req.query;
+	var { 
+		legal, sections,
+		longitudeMin, longitudeMax, latitudeMin, latitudeMax, 
+		provinsi, kota, kecamatan, kelurahan
+	} = req.query;
+
 	var filter = {};
 
 	if(legal === "true") {
@@ -26,6 +31,11 @@ router.get('/list', isAuthenticated(["admin"]), asyncRoute(async function(req, r
 	if(sections) {
 		filter.section = sections.split(",");
 	}
+
+	if(provinsi) filter.idProvinsi = provinsi;
+	if(kota) filter.idKota = kota;
+	if(kecamatan) filter.idKecamatan = kecamatan;
+	if(kelurahan) filter.idKelurahan = kelurahan;
 
 	var list = await Pju.findAll({ where: filter });
 	res.status(200).send(list);

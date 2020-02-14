@@ -8,6 +8,7 @@ var dir = "./client";
 var app = next({ dir, dev });
 var handle = app.getRequestHandler();
 var port = normalizePort(process.env.PORT || '3000');
+var passport = require("passport");
 
 (async function() {
 	global.db = await require("./server/db");
@@ -16,11 +17,18 @@ var port = normalizePort(process.env.PORT || '3000');
 	
 	var server = require('./server/app');
 
-	server.all("*", (req, res) => {
-		if(!req.url.startsWith("/_next") && req.url !== '/login' && !req.isAuthenticated()){
-			return res.redirect("/login");
+	server.all("*", (req, res, next) => {
+		if(req.url.startsWith("/_next")|| req.url === "/login"){
+			return handle(req, res);
 		}
-		return handle(req, res);
+
+		passport.authenticate("jwt", { session: false }, function(err, user, info){
+			if(user) {
+				req.user = user;
+				handle(req, res);
+			}
+			else res.redirect("/login");
+		})(req, res, next);
 	});
 
 	server.listen(port, err => {

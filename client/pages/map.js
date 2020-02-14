@@ -100,14 +100,4 @@ class Page extends React.Component {
 	}
 }
 
-function Marker({data}){
-	return (
-		<Icon
-			icon="map-marker-alt"
-			color= {data.idPelanggan ? "blue" : "red"}
-			style={{ fontSize: 30 }}
-		/>
-	);
-}
-
 export default Page;

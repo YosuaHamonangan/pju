@@ -32,20 +32,19 @@ module.exports = (sequelize, DataTypes) => {
 		jalan: {
 			type: DataTypes.STRING,
 		},
-		// Provinsi
-		provinsi: {
-			type: DataTypes.STRING,
+		idProvinsi: {
+			type: DataTypes.INTEGER,
 		},
 		// Kota/Kabupaten
-		kota: {
-			type: DataTypes.STRING,
+		idKota: {
+			type: DataTypes.INTEGER,
 		},
-		kecamatan: {
-			type: DataTypes.STRING,
+		idKecamatan: {
+			type: DataTypes.INTEGER,
 		},
 		// Kelurahan/Desa
-		kelurahan: {
-			type: DataTypes.STRING,
+		idKelurahan: {
+			type: DataTypes.INTEGER,
 		},
 		rw: {
 			type: DataTypes.STRING,
@@ -69,6 +68,11 @@ module.exports = (sequelize, DataTypes) => {
 	pju.associate = models => {
 		pju.hasMany(models.pjuHistory, {foreignKey: "kodePju", sourceKey: "kode"});
 		pju.hasOne(models.foto, {foreignKey: "id", as: "foto"});
+
+		pju.belongsTo(models.provinsi, {foreignKey: "idProvinsi", as: "provinsi"});
+		pju.belongsTo(models.kota, {foreignKey: "idKota", as: "kota"});
+		pju.belongsTo(models.kecamatan, {foreignKey: "idKecamatan", as: "kecamatan"});
+		pju.belongsTo(models.kelurahan, {foreignKey: "idKelurahan", as: "kelurahan"});
 	}
 	return pju;
 };
