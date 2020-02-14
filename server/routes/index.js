@@ -11,6 +11,10 @@ router.get('/test-secret', isAuthenticated(), function(req, res, next) {
 	res.send("Sukses");
 });
 
+router.get('/test-secret-lapangan', isAuthenticated(["lapangan"]), function(req, res, next) {
+	res.send("Sukses lapangan");
+});
+
 router.get('/get-provinsi', function(req, res, next) {
 	Provinsi
 		.findAll({

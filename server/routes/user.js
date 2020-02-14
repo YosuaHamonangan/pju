@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var asyncRoute = require("../utils/async-route");
 var { registerUser, changePassword, isAuthenticated, passport } = require("../utils/user-auth");
+var jwt = require("jsonwebtoken");
 var User = db.models.user;
 
 router.post("/register", isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
@@ -66,13 +67,17 @@ router.post("/login", function(req, res, next) {
 		}
 		req.logIn(user, err => {
 			if (err) return next(err);
-			return res.status(200).send(user.getLimitedInfo());
+
+			var token = jwt.sign({ id: user.id }, process.env.SECRET);
+			res.cookie("token", token, { httpOnly: true });
+			return res.status(200).send({ user: user.getLimitedInfo() });
 		});
 	})(req, res, next);
 });
 
 router.post("/logout", function(req, res, next) {
 	req.logout();
+	res.cookie("token", null, { httpOnly: true });
 	res.status(200).send("Logged out");
 });
 

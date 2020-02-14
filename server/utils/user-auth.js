@@ -1,6 +1,9 @@
 var passport = require("passport");
 var LocalStrategy = require("passport-local");
 var crypto = require("crypto");
+var passportJWT = require("passport-jwt");
+var JWTStrategy = passportJWT.Strategy;
+var ExtractJWT = passportJWT.ExtractJwt;
 var userRoles = require("../../global/constants/user-roles");
 var User = db.models.user;
 
@@ -49,6 +52,32 @@ passport.use(new LocalStrategy(
 	}
 ));
 
+passport.use(new JWTStrategy(
+	{
+		jwtFromRequest: function(req) {
+			var token = null;
+			if(req && req.cookies) {
+				token = req.cookies['token'];
+			}
+			return token;
+		},
+		secretOrKey: process.env.SECRET
+	}, 
+	async (payload, done) => {
+		try{
+			var user = await User.findByPk(payload.id);
+			if(!user) {
+				return done(null, false, { message: "Token tidak valid" });
+			}
+			return done(null, user)
+		}
+		catch(err) {
+			return done(err, false, { message: "Token tidak sesuai" });
+		}
+	}
+))
+
+
 passport.serializeUser(function(user, done) {
 	done(null, user.id);
 });
@@ -82,15 +111,18 @@ function isAuthenticated(roles) {
 	}
 
 	return function(req, res, next) {
-		if(!req.isAuthenticated()) {
-			return res.status(401).send({ message: "Unauthorized" });
-		}
+		passport.authenticate("jwt", { session: false }, function(err, user, info){
+			console.log("user")
+			if(!user) {
+				return res.status(401).send({ message: "Unauthorized" });
+			}
 
-		if(checkRole && !roles.includes(req.user.role)) {
-			return res.status(401).send({ message: "Unauthorized role" });
-		}
-		
-		next();
+			if(checkRole && !roles.includes(user.role)) {
+				return res.status(401).send({ message: "Unauthorized role" });
+			}
+			
+			next();
+		})(req, res, next);
 	}
 }
 

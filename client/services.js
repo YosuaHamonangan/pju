@@ -9,7 +9,7 @@ var instance = axios.create({
 var services = {
 	login: async function(username, password) {
 		var res = await instance.post("/user/login", {username, password});
-		var user = res.data;
+		var { user } = res.data;
 		store.dispatch({ type: "SET_USER", user });
 		return user;
 	},
