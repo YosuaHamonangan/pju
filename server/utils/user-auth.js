@@ -112,7 +112,6 @@ function isAuthenticated(roles) {
 
 	return function(req, res, next) {
 		passport.authenticate("jwt", { session: false }, function(err, user, info){
-			console.log("user")
 			if(!user) {
 				return res.status(401).send({ message: "Unauthorized" });
 			}
