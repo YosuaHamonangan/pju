@@ -59,6 +59,9 @@ module.exports = (sequelize, DataTypes) => {
 		freezeTableName: true,
 		timestamps: false,
 		hooks: {
+			beforeCreate: (pju, options) => {
+				pju.section = mapUtils.getSection(pju.longitude, pju.latitude);
+			},
 			beforeUpdate: (pju, options) => {
 				pju.section = mapUtils.getSection(pju.longitude, pju.latitude);
 			},

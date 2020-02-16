@@ -61,14 +61,16 @@ passport.use(new JWTStrategy(
 			}
 			return token;
 		},
+		passReqToCallback: true,
 		secretOrKey: process.env.SECRET
 	}, 
-	async (payload, done) => {
+	async (req, payload, done) => {
 		try{
 			var user = await User.findByPk(payload.id);
 			if(!user) {
 				return done(null, false, { message: "Token tidak valid" });
 			}
+			req.user = user;
 			return done(null, user)
 		}
 		catch(err) {
