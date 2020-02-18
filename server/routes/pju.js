@@ -10,7 +10,13 @@ var Pju = db.models.pju;
 var PjuHistory = db.models.pjuHistory;
 var Foto = db.models.foto;
 
-router.get('/list', isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
+router.get('/get', isAuthenticated(), asyncRoute(async function(req, res, next) {
+	var { kode } = req.query;
+	var pju = await Pju.findOne({ where: { kode } });
+	res.status(200).send(pju);
+}));
+
+router.get('/list', isAuthenticated(), asyncRoute(async function(req, res, next) {
 	var { 
 		legal, sections,
 		longitudeMin, longitudeMax, latitudeMin, latitudeMax, 
@@ -37,7 +43,7 @@ router.get('/list', isAuthenticated(["admin"]), asyncRoute(async function(req, r
 	if(kecamatan) filter.idKecamatan = kecamatan;
 	if(kelurahan) filter.idKelurahan = kelurahan;
 
-	var list = await Pju.findAll({ where: filter });
+	var list = await Pju.scope("include-association").findAll({ where: filter });
 	res.status(200).send(list);
 }));
 
@@ -91,36 +97,44 @@ router.post('/create', isAuthenticated(), asyncRoute(async function(req, res, ne
 	await fs.writeFile(filepath, fotoFile.data);
 
 	await PjuHistory.create({
+		type: "CREATE",
 		kodePju: pju.kode, 
 		kodeUser: user.kode,
-		type: "CREATE",
 	});
 
 	res.status(200).end();
 }));
 
-router.post('/update', isAuthenticated(["lapangan"]), asyncRoute(async function(req, res, next) {
-	var { user, body: data, query: { kode } } = req;
+router.post('/edit', isAuthenticated(), asyncRoute(async function(req, res, next) {
+	var { user, body, files } = req;
+	var { kode, ...data } = body;
 
-	var pju = await Pju.findOne({ where: { kode } });
-	if(!pju) {
-		var message = `PJU dengan Kode "${kode}" tidak ditemukan`;
-		res.status(400).send({ message });
-		return;
+	var pju = await Pju.findOne({ where: { kode }, include: ["foto"] });
+
+	if(files && files.foto) {
+		var fotoFile = files.foto;
+		var ext = path.extname(fotoFile.name);
+		var { foto } = pju;
+		var filepath = `/${foto.id}${ext}`;
+		await foto.update({ path: filepath });
+		await fs.writeFile(filepath, fotoFile.data);
 	}
 
-	var updatedKey = pju.set(data).changed();
-	await pju.save();
-
-	var detail = updatedKey ? `Update: ${updatedKey.join(", ")}` : "";
+	try {
+		pju.update(data);
+	}
+	catch(err) {
+		var message = "Data tidak valid";
+		return res.status(400).send({ message });
+	};
+	
 	await PjuHistory.create({
+		type: "UPDATE",
 		kodePju: pju.kode, 
 		kodeUser: user.kode,
-		type: "UPDATE",
-		detail
 	});
 
-	res.status(200).end();
+	res.status(200).send(pju);
 }));
 
 router.get('/statistic', isAuthenticated(), asyncRoute(async function(req, res, next) {

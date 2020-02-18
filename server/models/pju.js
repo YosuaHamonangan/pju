@@ -65,6 +65,11 @@ module.exports = (sequelize, DataTypes) => {
 			beforeUpdate: (pju, options) => {
 				pju.section = mapUtils.getSection(pju.longitude, pju.latitude);
 			},
+		},
+		scopes: {
+			"include-association": {
+				include: ["provinsi", "kota", "kecamatan", "kelurahan"],
+			},
 		}
 	});
 

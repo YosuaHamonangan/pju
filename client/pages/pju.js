@@ -113,6 +113,10 @@ class Page extends React.Component {
 								<th>Latitude</th>
 								<th>Longitude</th>
 								<th>Daya</th>
+								<th>Provinsi</th>
+								<th>Kota</th>
+								<th>Kecamatan</th>
+								<th>Kelurahan</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -123,6 +127,10 @@ class Page extends React.Component {
 										<td>{pju.latitude}</td>
 										<td>{pju.longitude}</td>
 										<td>{pju.daya}</td>
+										<td>{pju.provinsi ? pju.provinsi.nama : "-"}</td>
+										<td>{pju.kota ? pju.kota.nama : "-"}</td>
+										<td>{pju.kecamatan ? pju.kecamatan.nama : "-"}</td>
+										<td>{pju.kelurahan ? pju.kelurahan.nama : "-"}</td>
 									</tr>
 								))
 							}

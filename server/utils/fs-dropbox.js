@@ -12,7 +12,7 @@ var dbx = new Dropbox({ accessToken: process.env.DROPBOX_ACCESS_TOKEN, fetch });
 
 module.exports = {
 	writeFile: function(path, contents) {
-		return dbx.filesUpload({path, contents})
+		return dbx.filesUpload({path, contents, mode: "overwrite"})
 			.then( res => {} )
 	},
 	readFile: function(path) {
