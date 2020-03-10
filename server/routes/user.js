@@ -5,7 +5,8 @@ var { registerUser, changePassword, isAuthenticated, passport } = require("../ut
 var jwt = require("jsonwebtoken");
 var User = db.models.user;
 
-router.post("/register", isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
+// router.post("/register", isAuthenticated(["admin"]), asyncRoute(async function(req, res, next) {
+router.post("/register", asyncRoute(async function(req, res, next) {
 	try {
 		var user = await registerUser(req.body);
 		res.status(200).send("Registered");
