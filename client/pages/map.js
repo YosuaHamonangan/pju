@@ -89,6 +89,7 @@ class Page extends React.Component {
 								defaultCenter={center}
 								defaultZoom={zoom}
 								onChange={this.onMapChange}
+								onClick={console.log}
 							>
 								<MapMarker list={list}/>
 							</GoogleMapReact>

@@ -59,12 +59,32 @@ router.get('/img', isAuthenticated(), asyncRoute(async function(req, res, next) 
 }));
 
 router.get('/excel', isAuthenticated(), asyncRoute(async function(req, res, next) {
-	var list = await Pju.findAll();
+	var list = await Pju.scope("include-association").findAll();
 
-	var columns = ["longitude", "latitude", "daya"];
-	var data = list.map( row => columns.map( col => row[col] ) );
+	var header = [
+		"Status", "ID Pelanggan", "Longitude", "Latitude", 
+		"Provinsi", "Kota/Kabupaten", "Kecamatan", "Kelurahan/Desa",
+		"Jalan", "RT", "RW", "Tipe Lampu", "Daya"
+	];
+	var data = list.map( row => {
+		return [
+			row.idPelanggan ? "legal" : "ilegal",
+			row.idPelanggan || "",
+			row.longitude,
+			row.latitude,
+			row.provinsi ? row.provinsi.nama : "",
+			row.kota ? row.kota.nama : "",
+			row.kecamatan ? row.kecamatan.nama : "",
+			row.kelurahan ? row.kelurahan.nama : "",
+			row.jalan || "",
+			row.rt || "",
+			row.rw || "",
+			row.tipeLampu || "",
+			row.daya,
+		]
+	});
 
-	var filepath = createExcel("pju.xlsx", [columns, ...data]);
+	var filepath = createExcel("pju.xlsx", [header, ...data]);
 	res.status(200).download(filepath, 'pju.xlsx');
 }));
 
