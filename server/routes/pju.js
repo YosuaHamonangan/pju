@@ -158,14 +158,17 @@ router.post('/edit', isAuthenticated(), asyncRoute(async function(req, res, next
 }));
 
 router.get('/statistic', isAuthenticated(), asyncRoute(async function(req, res, next) {
-	var data = await Pju.findOne({
-		attributes:[
-			[sequelize.literal("count(id)"), "totalPju"],
-			[sequelize.literal("SUM(idPelanggan IS NULL)"), "totalPjuIlegal"],
-			[sequelize.literal("SUM(daya)"), "totalDaya"],
-			[sequelize.literal("SUM(daya * (idPelanggan IS NULL))"), "totalDayaIlegal"],
-		]
-	});
+	var filterIllegal = { 
+		where: { idPelanggan: null }
+	};
+
+	var data = {
+		totalPju: await Pju.count(),
+		totalPjuIlegal: await Pju.count(filterIllegal),
+		totalDaya: await Pju.sum("daya"),
+		totalDayaIlegal: await Pju.sum("daya", filterIllegal),
+	}
+
 	res.status(200).send(data);
 }));
 
